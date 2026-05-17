@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Acadify: AI Learning Management System</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="icon" type="image/png" href="acadify-favicon.png"/>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-page" class="auth-page">
+  <div class="auth-hero">
+    <div class="auth-hero-logo"><div class="dot"></div> Acadify</div>
+    <div class="auth-hero-card">
+      <blockquote>"Tell me and I forget. Teach me and I remember. Involve me and I learn."</blockquote>
+      <cite>— Benjamin Franklin</cite>
+      <div class="hero-badges">
+        <span class="hero-badge"><i class="fas fa-robot"></i> AI Tutor</span>
+        <span class="hero-badge"><i class="fas fa-question-circle"></i> Quiz Generator</span>
+        <span class="hero-badge"><i class="fas fa-chart-line"></i> Progress Tracker</span>
+        <span class="hero-badge"><i class="fas fa-book-open"></i> Personalized Review</span>
+      </div>
+    </div>
+  </div>
+  <div class="auth-panel">
+    <div class="auth-container">
+      <div class="auth-brand"><div class="brand-dot"></div><span>Acadify</span></div>
+      <p class="auth-tagline">Your intelligent learning companion</p>
+      <div class="auth-card">
+        <h2>Welcome back</h2>
+        <p class="auth-sub">Sign in to continue learning</p>
+        <div id="login-error" class="alert-error" style="display:none;"></div>
+        <div class="form-group"><label>Email / Student ID</label><input type="text" id="login-email" placeholder="e.g. student@school.edu"/></div>
+        <div class="form-group"><label>Password</label>
+          <div class="input-pw-wrap">
+            <input type="password" id="login-pw" placeholder="Enter your password"/>
+            <button type="button" class="pw-toggle" onclick="togglePw('login-pw',this)"><i class="fas fa-eye"></i></button>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+        <div class="auth-footer">Don't have an account? <a href="#" onclick="showRegister()">Register here</a></div>
+        <div class="auth-footer" style="margin-top:6px;"><small style="color:var(--text-muted);">Demo: demo@acadify.edu / password123</small></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REGISTER ===== -->
+<div id="register-page" class="auth-page" style="display:none;">
+  <div class="auth-hero">
+    <div class="auth-hero-logo"><div class="dot"></div> Acadify</div>
+    <div class="auth-hero-card">
+      <blockquote>"The beautiful thing about learning is that no one can take it away from you."</blockquote>
+      <cite>— B.B. King</cite>
+      <div class="hero-badges">
+        <span class="hero-badge"><i class="fas fa-user-graduate"></i> Student Portal</span>
+        <span class="hero-badge"><i class="fas fa-brain"></i> AI-Powered</span>
+        <span class="hero-badge"><i class="fas fa-trophy"></i> Track Growth</span>
+      </div>
+    </div>
+  </div>
+  <div class="auth-panel">
+    <div class="auth-container" style="max-width:400px;">
+      <div class="auth-brand"><div class="brand-dot"></div><span>Acadify</span></div>
+      <p class="auth-tagline">Create your learning account</p>
+      <div class="auth-card">
+        <h2>Create Account</h2>
+        <p class="auth-sub">Start your AI-powered learning journey</p>
+        <div id="register-error" class="alert-error" style="display:none;"></div>
+        <div id="register-success" class="alert-success" style="display:none;"></div>
+        <div class="form-row">
+          <div class="form-group"><label>First Name <span class="required">*</span></label><input type="text" id="reg-fn" placeholder="e.g. Juan"/></div>
+          <div class="form-group"><label>Last Name <span class="required">*</span></label><input type="text" id="reg-ln" placeholder="e.g. Dela Cruz"/></div>
+        </div>
+        <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" id="reg-email" placeholder="e.g. juan@school.edu"/></div>
+        <div class="form-group"><label>Student ID <span class="required">*</span></label><input type="text" id="reg-sid" placeholder="e.g. 2024-00123"/></div>
+        <div class="form-group"><label>Grade / Year Level <span class="required">*</span></label>
+          <select id="reg-grade">
+            <option value="">— Select —</option>
+            <option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option>
+            <option>Grade 11</option><option>Grade 12</option>
+            <option>1st Year College</option><option>2nd Year College</option>
+            <option>3rd Year College</option><option>4th Year College</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Password <span class="required">*</span></label>
+          <div class="input-pw-wrap">
+            <input type="password" id="reg-pw" placeholder="At least 8 characters" oninput="checkPwStrength(this.value)"/>
+            <button type="button" class="pw-toggle" onclick="togglePw('reg-pw',this)"><i class="fas fa-eye"></i></button>
+          </div>
+          <div class="pw-strength" id="pw-strength" style="display:none;">
+            <div class="pw-strength-bar"><div id="pw-strength-fill" class="pw-strength-fill"></div></div>
+            <span id="pw-strength-label"></span>
+          </div>
+        </div>
+        <div class="form-group"><label>Confirm Password <span class="required">*</span></label>
+          <div class="input-pw-wrap">
+            <input type="password" id="reg-pw2" placeholder="Re-enter your password"/>
+            <button type="button" class="pw-toggle" onclick="togglePw('reg-pw2',this)"><i class="fas fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="form-check"><input type="checkbox" id="reg-agree"/><label for="reg-agree">I agree to the <a href="#" onclick="return false;">Terms & Conditions</a></label></div>
+        <button class="btn-primary" onclick="doRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
+        <div class="auth-footer">Already have an account? <a href="#" onclick="showLogin()">Sign in here</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="app" class="app app-bg" style="display:none;">
+  <nav class="navbar">
+    <div class="nav-logo"><div class="brand-dot small"></div> Acadify</div>
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="showPage('dashboard',this)"><i class="fas fa-th-large"></i> Dashboard</button>
+      <button class="nav-btn" onclick="showPage('tutor',this)"><i class="fas fa-robot"></i> AI Tutor</button>
+      <button class="nav-btn" onclick="showPage('quiz',this)"><i class="fas fa-question-circle"></i> Quiz</button>
+      <button class="nav-btn" onclick="showPage('tracker',this)"><i class="fas fa-chart-line"></i> Weak Topics</button>
+      <button class="nav-btn" onclick="showPage('reviewer',this)"><i class="fas fa-book-open"></i> Reviewer</button>
+      <button class="nav-btn" onclick="showPage('reports',this)"><i class="fas fa-file-alt"></i> Reports</button>
+    </div>
+    <div class="nav-user">
+      <span class="user-name">Student</span>
+      <div class="avatar">ST</div>
+      <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="page active">
+      <div class="page-header">
+        <h2 id="dash-greeting">Good day! 👋</h2>
+        <p>Here's your learning overview</p>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-card"><div class="metric-label">Lessons Studied</div><div class="metric-value" id="m-lessons">0</div><div class="metric-sub">Total AI explanations</div></div>
+        <div class="metric-card"><div class="metric-label">Quizzes Taken</div><div class="metric-value" id="m-quizzes">0</div><div class="metric-sub">Total quizzes completed</div></div>
+        <div class="metric-card"><div class="metric-label">Average Score</div><div class="metric-value green" id="m-score">—</div><div class="metric-sub">Across all quizzes</div></div>
+        <div class="metric-card"><div class="metric-label">Weak Topics</div><div class="metric-value" id="m-weak" style="color:#EF9F27;">0</div><div class="metric-sub">Needs more review</div></div>
+      </div>
+      <div class="card">
+        <h3><i class="fas fa-book"></i> Your Courses</h3>
+        <div class="courses-grid" id="courses-grid">
+          <div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-book"></i><p>No courses yet. Take a quiz or ask the AI Tutor to get started!</p></div>
+        </div>
+      </div>
+      <div class="dash-grid">
+        <div class="card">
+          <h3><i class="fas fa-history"></i> Recent Activity</h3>
+          <div id="recent-activity">
+            <div class="empty-state"><i class="fas fa-book-open"></i><p>No activity yet. Start by asking the AI Tutor a question!</p></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-exclamation-triangle" style="color:#EF9F27;"></i> Topics Needing Review</h3>
+          <div id="dash-weak-topics">
+            <div class="empty-state"><i class="fas fa-check-circle" style="color:#1D9E75;"></i><p>No weak topics detected yet. Take some quizzes!</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI TUTOR -->
+    <div id="page-tutor" class="page">
+      <div class="page-header"><h2>AI Tutor</h2><p>Ask anything — get clear, personalized explanations instantly</p></div>
+      <div class="tutor-layout">
+        <div class="tutor-sidebar">
+          <div class="card">
+            <h3><i class="fas fa-cog"></i> Lesson Settings</h3>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="field-label">Subject</label>
+              <select id="tutor-subject">
+                <option value="">— Select subject —</option>
+                <option>Mathematics</option><option>Science</option><option>English</option>
+                <option>Filipino</option><option>History</option><option>Physics</option>
+                <option>Chemistry</option><option>Biology</option><option>Computer Science</option>
+                <option>Economics</option><option>Statistics</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="field-label">Difficulty Level</label>
+              <select id="tutor-level">
+                <option value="beginner">Beginner — Simple explanation</option>
+                <option value="intermediate" selected>Intermediate — Standard level</option>
+                <option value="advanced">Advanced — In-depth detail</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="field-label">Explanation Style</label>
+              <select id="tutor-style">
+                <option value="simple">Simple & Clear</option>
+                <option value="examples">With Examples</option>
+                <option value="stepbystep" selected>Step-by-Step</option>
+                <option value="visual">Visual / Diagram-like</option>
+              </select>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px;">
+            <h3><i class="fas fa-lightbulb"></i> Quick Topics</h3>
+            <div class="quick-topics" id="quick-topics">
+              <span class="qtag" onclick="setQuestion('Explain the Pythagorean theorem')">Pythagorean Theorem</span>
+              <span class="qtag" onclick="setQuestion('What is photosynthesis?')">Photosynthesis</span>
+              <span class="qtag" onclick="setQuestion('Explain Newton\\s laws of motion')">Newton's Laws</span>
+              <span class="qtag" onclick="setQuestion('What is the water cycle?')">Water Cycle</span>
+              <span class="qtag" onclick="setQuestion('Explain supply and demand')">Supply & Demand</span>
+              <span class="qtag" onclick="setQuestion('What is DNA?')">DNA</span>
+              <span class="qtag" onclick="setQuestion('Explain fractions and decimals')">Fractions</span>
+              <span class="qtag" onclick="setQuestion('What is gravity?')">Gravity</span>
+            </div>
+          </div>
+        </div>
+        <div class="tutor-main">
+          <div class="chat-box" id="chat-box">
+            <div class="chat-welcome">
+              <div class="chat-welcome-icon"><i class="fas fa-robot"></i></div>
+              <h3>Hi! I'm your AI Tutor 👋</h3>
+              <p>Ask me to explain any topic, concept, or lesson. I'll give you a clear, personalized explanation based on your level!</p>
+            </div>
+          </div>
+          <div class="chat-input-wrap">
+            <textarea id="tutor-question" placeholder="Type your question here... e.g. 'Explain quadratic equations with examples'" rows="2" onkeydown="handleTutorKey(event)"></textarea>
+            <button class="btn-send" onclick="askTutor()" id="ask-btn"><i class="fas fa-paper-plane"></i></button>
+          </div>
+          <p style="font-size:11px;color:rgba(255,255,255,0.5);text-align:center;margin-top:6px;">Press Enter to send · Shift+Enter for new line</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="page-quiz" class="page">
+      <div class="page-header"><h2>Quiz Generator</h2><p>AI-generated quizzes tailored to your topic and level</p></div>
+      <div class="quiz-layout">
+        <div class="quiz-setup-panel" id="quiz-setup">
+          <div class="card">
+            <h3><i class="fas fa-sliders-h"></i> Quiz Settings</h3>
+            <div class="form-group"><label class="field-label">Topic / Subject</label><input type="text" id="quiz-topic" placeholder="e.g. Photosynthesis, World War II, Algebra"/></div>
+            <div class="form-row">
+              <div class="form-group"><label class="field-label">Number of Questions</label>
+                <select id="quiz-count">
+                  <option value="5">5 questions</option>
+                  <option value="10" selected>10 questions</option>
+                  <option value="15">15 questions</option>
+                  <option value="20">20 questions</option>
+                </select>
+              </div>
+              <div class="form-group"><label class="field-label">Difficulty</label>
+                <select id="quiz-difficulty">
+                  <option value="easy">Easy</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group"><label class="field-label">Question Type</label>
+              <select id="quiz-type">
+                <option value="multiple">Multiple Choice</option>
+                <option value="truefalse">True or False</option>
+                <option value="mixed">Mixed</option>
+              </select>
+            </div>
+            <button class="btn-primary" onclick="generateQuiz()" id="gen-quiz-btn"><i class="fas fa-magic"></i> Generate Quiz</button>
+          </div>
+          <div class="card" style="margin-top:14px;">
+            <h3><i class="fas fa-history"></i> Quiz History</h3>
+            <div id="quiz-history-list">
+              <div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No quizzes taken yet.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="quiz-main-panel" id="quiz-main">
+          <div class="empty-state card" style="padding:48px;">
+            <i class="fas fa-question-circle" style="font-size:48px;color:var(--green);opacity:0.4;"></i>
+            <p style="margin-top:12px;">Configure your quiz on the left and click<br><strong>Generate Quiz</strong> to begin!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEAK TOPICS TRACKER -->
+    <div id="page-tracker" class="page">
+      <div class="page-header"><h2>Weak Topics Tracker</h2><p>Topics you need to review based on your quiz performance</p></div>
+      <div class="tracker-grid">
+        <div class="card" style="grid-column:1/-1;">
+          <h3><i class="fas fa-chart-bar"></i> Topic Performance Overview</h3>
+          <div id="tracker-bars">
+            <div class="empty-state"><i class="fas fa-chart-line"></i><p>Take quizzes to track your topic performance here.</p></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-exclamation-circle" style="color:#EF4444;"></i> Weak Topics <span class="chip chip-red" id="weak-count-badge">0</span></h3>
+          <div id="weak-list">
+            <div class="empty-state"><i class="fas fa-smile" style="color:#1D9E75;"></i><p>No weak topics yet — keep taking quizzes!</p></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-check-circle" style="color:#1D9E75;"></i> Strong Topics <span class="chip chip-green" id="strong-count-badge">0</span></h3>
+          <div id="strong-list">
+            <div class="empty-state"><i class="fas fa-star"></i><p>Complete quizzes to see your strong topics.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERSONALIZED REVIEWER -->
+    <div id="page-reviewer" class="page">
+      <div class="page-header"><h2>Personalized Reviewer</h2><p>AI-generated review materials based on your weak topics</p></div>
+      <div class="reviewer-layout">
+        <div class="reviewer-sidebar">
+          <div class="card">
+            <h3><i class="fas fa-cog"></i> Reviewer Settings</h3>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="field-label">Topic to Review</label>
+              <input type="text" id="reviewer-topic" placeholder="e.g. Photosynthesis, Algebra"/>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="field-label">Review Type</label>
+              <select id="reviewer-type">
+                <option value="summary">Topic Summary</option>
+                <option value="keypoints">Key Points & Concepts</option>
+                <option value="formulas">Formulas & Definitions</option>
+                <option value="examples">Worked Examples</option>
+                <option value="complete">Complete Reviewer</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:14px;">
+              <label class="field-label">Detail Level</label>
+              <select id="reviewer-level">
+                <option value="basic">Basic Overview</option>
+                <option value="standard" selected>Standard</option>
+                <option value="detailed">Detailed & Comprehensive</option>
+              </select>
+            </div>
+            <button class="btn-primary" onclick="generateReviewer()" id="gen-reviewer-btn"><i class="fas fa-magic"></i> Generate Reviewer</button>
+          </div>
+          <div class="card" style="margin-top:14px;">
+            <h3><i class="fas fa-exclamation-triangle" style="color:#EF9F27;"></i> Your Weak Topics</h3>
+            <div id="reviewer-weak-list">
+              <div class="empty-state"><i class="fas fa-clipboard-check"></i><p>Take quizzes first to identify weak topics.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="reviewer-output" id="reviewer-output">
+          <div class="empty-state card" style="padding:48px;">
+            <i class="fas fa-book-open" style="font-size:48px;color:var(--green);opacity:0.4;"></i>
+            <p style="margin-top:12px;">Select a topic and click<br><strong>Generate Reviewer</strong> to get your personalized study material!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div id="page-reports" class="page">
+      <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div><h2>Reports</h2><p>Your complete learning performance summary</p></div>
+        <button class="btn-dl-all" onclick="downloadPDF('all')"><i class="fas fa-file-download"></i> Download All Reports</button>
+      </div>
+      <div class="reports-grid">
+        <div class="report-card">
+          <h3><i class="fas fa-chart-bar" style="color:#1D9E75;"></i> Learning Summary</h3>
+          <div class="report-stat"><span class="key">Lessons Studied</span><span class="val" id="rpt-lessons">0</span></div>
+          <div class="report-stat"><span class="key">Quizzes Taken</span><span class="val" id="rpt-quizzes">0</span></div>
+          <div class="report-stat"><span class="key">Average Score</span><span class="val green" id="rpt-score">—</span></div>
+          <div class="report-stat"><span class="key">Best Score</span><span class="val" id="rpt-best">—</span></div>
+          <div class="report-stat"><span class="key">Reviewers Generated</span><span class="val" id="rpt-reviewers">0</span></div>
+          <button class="download-btn" onclick="downloadPDF('summary')"><i class="fas fa-download"></i> Download PDF</button>
+        </div>
+        <div class="report-card">
+          <h3><i class="fas fa-question-circle" style="color:#378ADD;"></i> Quiz Performance</h3>
+          <div id="rpt-quiz-list"><p style="font-size:13px;color:var(--text-muted);padding:8px 0;">No quizzes taken yet.</p></div>
+          <button class="download-btn" onclick="downloadPDF('quizzes')"><i class="fas fa-download"></i> Download PDF</button>
+        </div>
+        <div class="report-card">
+          <h3><i class="fas fa-exclamation-triangle" style="color:#EF9F27;"></i> Weak Topics Report</h3>
+          <div id="rpt-weak-list"><p style="font-size:13px;color:var(--text-muted);padding:8px 0;">No data yet.</p></div>
+          <button class="download-btn" onclick="downloadPDF('weaktopics')"><i class="fas fa-download"></i> Download PDF</button>
+        </div>
+        <div class="report-card">
+          <h3><i class="fas fa-book-open" style="color:#7F77DD;"></i> Reviewer History</h3>
+          <div id="rpt-reviewer-list"><p style="font-size:13px;color:var(--text-muted);padding:8px 0;">No reviewers generated yet.</p></div>
+          <button class="download-btn" onclick="downloadPDF('reviewer')"><i class="fas fa-download"></i> Download PDF</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div id="modal-overlay" class="modal-overlay" style="display:none;" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-title">Modal</h3>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="mainscript.js"></script>
+</body>
+</html>
