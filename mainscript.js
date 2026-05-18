@@ -92,12 +92,23 @@ function launchApp(user) {
   renderDashboard();
 }
 
+// ---- MOBILE MENU ----
+function toggleMobileMenu() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('active');
+}
+function closeMobileMenu() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.remove('active');
+}
+
 // ---- NAVIGATION ----
 function showPage(name, btn) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+  closeMobileMenu();
   if (name==='reports')  renderReports();
   if (name==='tracker')  renderTracker();
   if (name==='reviewer') renderReviewerWeakList();

@@ -112,7 +112,9 @@
 
 <!-- ===== MAIN APP ===== -->
 <div id="app" class="app app-bg" style="display:none;">
-  <nav class="navbar">
+  <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+  <nav class="navbar" id="navbar">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
     <div class="nav-logo"><div class="brand-dot small"></div> Acadify</div>
     <div class="nav-links">
       <button class="nav-btn active" onclick="showPage('dashboard',this)"><i class="fas fa-th-large"></i> Dashboard</button>
